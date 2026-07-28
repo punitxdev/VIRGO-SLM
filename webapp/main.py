@@ -215,6 +215,88 @@ def stop_generation():
     return {"status": "stopped"}
 
 
+@app.get("/report", response_class=HTMLResponse)
+def get_report_page():
+    report_path = os.path.join(BASE_DIR, "docs", "PROJECT_REPORT.md")
+    if not os.path.exists(report_path):
+        report_path = os.path.join(BASE_DIR, "PROJECT_REPORT.md")
+    
+    content = ""
+    if os.path.exists(report_path):
+        with open(report_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    else:
+        content = "# Technical Report Not Found"
+
+    # Escape backslashes for JS template string embedding
+    js_content = content.replace("\\", "\\\\").replace("`", "\\`").replace("$", "\\$")
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virgo SLM V1.0 - Technical Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {{
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }}
+        .header-bar {{
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        .header-bar a {{
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }}
+        .header-bar a:hover {{ text-decoration: underline; }}
+        .container {{
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 24px 80px 24px;
+        }}
+        .markdown-body {{
+            background: transparent !important;
+            box-sizing: border-box;
+        }}
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <div><strong style="color: #f0f6fc; font-size: 16px;">♍ Virgo SLM V1.0 Technical Report</strong></div>
+        <div>
+            <a href="/">← Return to Web Studio</a> &nbsp;|&nbsp; 
+            <a href="https://github.com/punitxdev/VIRGO-SLM" target="_blank">View on GitHub ↗</a>
+        </div>
+    </div>
+    <div class="container">
+        <article id="content" class="markdown-body"></article>
+    </div>
+    <script>
+        const markdownText = `{js_content}`;
+        document.getElementById('content').innerHTML = marked.parse(markdownText);
+    </script>
+</body>
+</html>"""
+    return HTMLResponse(content=html)
+
+
 # Mount static files (Frontend)
 os.makedirs(os.path.join(os.path.dirname(__file__), "static"), exist_ok=True)
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")
