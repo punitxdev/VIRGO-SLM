@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use Virgo in your research or educational projects, please cite it as below."
+authors:
+  - family-names: "Kashyap"
+    given-names: "Punit Kumar"
+    affiliation: "Indian Institute of Technology Dharwad"
+title: "Virgo SLM V1.0: A 120M Parameter Small Language Model Built From Scratch"
+version: "1.0.0"
+date-released: 2026-07-28
+url: "https://github.com/punitxdev/VIRGO-SLM"
+repository-code: "https://github.com/punitxdev/VIRGO-SLM"
+keywords:
+  - language-model
+  - transformer
+  - small-language-model
+  - pytorch
+  - deep-learning
+  - instruct-tuning

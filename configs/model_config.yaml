@@ -1,0 +1,17 @@
+# Virgo SLM V1.0 Model Architecture Configuration
+
+model_name: "virgo-slm-v1.0"
+architecture: "decoder-only-transformer"
+num_parameters: 120000000
+
+hyperparameters:
+  vocab_size: 45000
+  block_size: 1024
+  n_layer: 12
+  n_head: 12
+  n_embd: 768
+  d_ff: 3072
+  dropout: 0.0
+  bias: false
+  norm_eps: 1.0e-5
+  rotary_dim: 64

@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch Checkpoints & Large Weights (Keep repo lightweight)
+*.pt
+*.bin
+*.pth
+*.onnx
+*.safetensors
+trained_models/
+virgo_110M/
+
+# Datasets & Large Binary Archives
+*.csv
+*.zip
+*.tar.gz
+virgo_chat_dataset.csv
+virgo_dataset_bins.zip
+virgo_v2_dataset.zip
+virgo_ready_dataset/
+virgo_v2_dataset/
+virgo_data_tokens/
+datasets/
+
+# Jupyter Notebook Checkpoints & Physics Logs
+.ipynb_checkpoints
+physics_state.txt
+Untitled.ipynb
+.~lock.*
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Antigravity & IDE settings
+.gemini/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MacOS / OS generated
+.DS_Store
+Thumbs.db

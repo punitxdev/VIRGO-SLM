@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virgo AI Studio</title>
+    <meta name="description" content="Virgo — High-Performance Conversational SLM Workspace by Punit Kumar Kashyap">
+    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="icon" href="logo_icon_orange.png?v=18" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="logo-wrapper">
+                    <img src="logo_icon_white.png?v=18" alt="Virgo Logo" class="brand-logo-img">
+                </div>
+                <div class="brand-info">
+                    <span class="brand-title">Virgo AI</span>
+                    <span class="brand-badge">120M</span>
+                </div>
+            </div>
+            <div class="sidebar-actions">
+                <button class="icon-btn" id="new-chat-btn" title="New Chat (Ctrl+N)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <button class="icon-btn mobile-only" id="mobile-close-btn" title="Close Sidebar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-body">
+            <!-- Model Engine Selection -->
+            <div class="sidebar-group">
+                <div class="label-row">
+                    <label class="sidebar-label">Model Engine</label>
+                    <span class="status-tag" id="model-status-tag">Ready</span>
+                </div>
+                <div class="select-wrapper">
+                    <select id="model-select" class="select-input" disabled>
+                        <option value="" disabled selected>Loading available models...</option>
+                    </select>
+                    <svg class="select-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div id="model-loading-indicator" class="model-loading-text" style="display: none;">
+                    <span class="mini-spinner"></span> Switching neural weights...
+                </div>
+            </div>
+
+            <!-- Max Tokens Control (Primary Setting) -->
+            <div class="sidebar-group">
+                <div class="label-row">
+                    <label class="sidebar-label" for="max-tokens">Max Tokens</label>
+                    <input type="number" id="max-tokens" min="1" max="2048" value="128" class="number-input-sm">
+                </div>
+                <input type="range" id="max-tokens-slider" min="16" max="1024" step="16" value="128" class="slider-input">
+                <div class="quick-token-pills" id="quick-token-pills">
+                    <button type="button" class="token-pill-btn" data-tokens="64">64</button>
+                    <button type="button" class="token-pill-btn active" data-tokens="128">128</button>
+                    <button type="button" class="token-pill-btn" data-tokens="256">256</button>
+                    <button type="button" class="token-pill-btn" data-tokens="512">512</button>
+                    <button type="button" class="token-pill-btn" data-tokens="1024">1024</button>
+                </div>
+            </div>
+
+            <!-- Temperature Control -->
+            <div class="sidebar-group">
+                <div class="label-row">
+                    <label class="sidebar-label" for="temperature">Temperature</label>
+                    <span class="value-badge" id="temp-val">0.00</span>
+                </div>
+                <input type="range" id="temperature" min="0" max="2.0" step="0.05" value="0" class="slider-input">
+            </div>
+
+            <!-- Recent Sessions List -->
+            <div class="sidebar-group history-group">
+                <div class="label-row">
+                    <label class="sidebar-label">Sessions</label>
+                    <button class="text-btn-xs" id="clear-history-btn" title="Clear Chat">Clear</button>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div class="history-item active" id="current-session-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span class="history-title" id="active-session-title">Current Chat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="author-card">
+                <div class="author-avatar">P</div>
+                <div class="author-meta">
+                    <span class="author-name">Punit Kumar Kashyap</span>
+                    <span class="author-role">Virgo Creator</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+        <!-- Top Navigation Header -->
+        <header class="header">
+            <button class="icon-btn" id="sidebar-toggle" aria-label="Toggle Sidebar" title="Toggle Sidebar (Ctrl+\)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            </button>
+
+            <div class="header-model-info" id="topbar-model-pill">
+                <span class="status-indicator"></span>
+                <span id="topbar-model-name">Virgo Instruct v2</span>
+                <span class="model-tag-mini">120M</span>
+            </div>
+
+            <div class="header-spacer"></div>
+
+            <div class="header-actions">
+                <button class="action-pill-btn" id="header-new-btn" title="Start New Chat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>New Chat</span>
+                </button>
+
+                <button class="icon-btn" id="theme-toggle" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+                    <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Viewport -->
+        <div class="chat-viewport" id="chat-container">
+            <div class="chat-stream" id="chat-history">
+                <!-- Welcome Screen -->
+                <div class="welcome-container" id="welcome-screen">
+                    <img src="logo_full_white.png?v=18" alt="Virgo SLM" class="welcome-logo-banner">
+                    <h1 class="welcome-heading">What would you like to ask?</h1>
+
+                    <!-- Prompt Cards Grid -->
+                    <div class="prompt-grid" id="prompt-grid">
+                        <button class="prompt-card" data-category="coding" data-prompt="Write a Python function to solve binary search efficiently with docstrings.">
+                            <div class="card-header">
+                                <span class="card-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </span>
+                                <span class="prompt-title">Python Binary Search</span>
+                            </div>
+                            <span class="prompt-desc">Generate an optimized algorithm with clean documentation</span>
+                            <span class="card-arrow">→</span>
+                        </button>
+
+                        <button class="prompt-card" data-category="reasoning" data-prompt="Explain the key differences between supervised and unsupervised machine learning models.">
+                            <div class="card-header">
+                                <span class="card-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                                </span>
+                                <span class="prompt-title">Machine Learning</span>
+                            </div>
+                            <span class="prompt-desc">Break down supervised vs unsupervised learning concepts</span>
+                            <span class="card-arrow">→</span>
+                        </button>
+
+                        <button class="prompt-card" data-category="coding" data-prompt="Write an SQL query to create a users table and select active subscribers.">
+                            <div class="card-header">
+                                <span class="card-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                                </span>
+                                <span class="prompt-title">SQL Table &amp; Query</span>
+                            </div>
+                            <span class="prompt-desc">Generate relational table schemas and filter queries</span>
+                            <span class="card-arrow">→</span>
+                        </button>
+
+                        <button class="prompt-card" data-category="creative" data-prompt="Write a short poem about artificial intelligence and space exploration.">
+                            <div class="card-header">
+                                <span class="card-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                                </span>
+                                <span class="prompt-title">Creative Poem</span>
+                            </div>
+                            <span class="prompt-desc">Craft an evocative verse combining AI and space</span>
+                            <span class="card-arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Dock -->
+        <div class="input-dock">
+            <div class="input-container">
+                <div class="input-box">
+                    <textarea id="prompt-input" placeholder="Send a message... (Shift+Enter for newline)" rows="1" autocomplete="off"></textarea>
+                    
+                    <div class="input-bottom-bar">
+                        <div class="input-meta-tools">
+                            <span class="token-counter" id="input-char-counter">0 chars</span>
+                            <span class="shortcut-hint"><kbd>Enter</kbd> to send</span>
+                        </div>
+                        <div class="input-controls">
+                            <button id="send-btn" class="send-button" aria-label="Send message" title="Send (Enter)">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <button id="stop-btn" class="stop-button" aria-label="Stop generation" title="Stop Generation" style="display: none;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="disclaimer">Virgo AI may produce inaccurate information. Verify important facts.</div>
+        </div>
+    </main>
+
+    <script src="script.js?v=35"></script>
+</body>
+</html>

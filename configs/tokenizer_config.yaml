@@ -1,0 +1,15 @@
+# Virgo Tokenizer Configuration
+
+tokenizer_type: "ByteLevelBPE"
+vocab_size: 45000
+model_max_length: 1024
+
+special_tokens:
+  pad_token: "<pad>"
+  pad_id: 0
+  unk_token: "<unk>"
+  unk_id: 1
+  bos_token: "<s>"
+  bos_id: 2
+  eos_token: "</s>"
+  eos_id: 3
