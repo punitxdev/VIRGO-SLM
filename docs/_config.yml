@@ -1,0 +1,9 @@
+title: Virgo SLM V1.0 - Technical Documentation
+description: A 120M Parameter Small Language Model Built Completely From Scratch by Punit Kumar Kashyap (IIT Dharwad)
+theme: jekyll-theme-primer
+markdown: kramdown
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
