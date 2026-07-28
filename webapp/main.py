@@ -40,9 +40,9 @@ TOKENIZER_PATH = os.path.join(BASE_DIR, "virgo_data_tokens", "virgo_tokenizer.js
 # =============================================
 MODEL_REGISTRY = {
     "virgo_instruct": {
-        "name": "Virgo Instruct",
-        "file": "virgo_instruct.pt",
-        "description": "Instruction-following model fine-tuned for prompt execution",
+        "name": "Virgo Instruct V2",
+        "file": "virgo_instruction_v2.pt",
+        "description": "Instruction-following model fine-tuned for prompt execution (V2)",
         "kaggle": "https://www.kaggle.com/models/punitkashyap2007/virgo-instruct",
     },
     "virgo_chat": {
