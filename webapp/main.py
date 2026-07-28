@@ -108,7 +108,7 @@ class ChatRequest(BaseModel):
     max_tokens: int = 128
     temperature: float = 0.0
     top_k: int = 1
-    top_p: float = 1.0
+    top_p: float = 0.9
     repetition_penalty: float = 1.10
 
 class ChatResponse(BaseModel):

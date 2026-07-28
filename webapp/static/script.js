@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const temp = tempSlider ? parseFloat(tempSlider.value) : 0.0;
             const maxTokens = maxTokensInput ? (parseInt(maxTokensInput.value, 10) || 128) : (maxTokensSlider ? parseInt(maxTokensSlider.value, 10) : 128);
             const topK = topkSlider ? parseInt(topkSlider.value, 10) : (temp === 0 ? 1 : 50);
-            const topP = toppSlider ? parseFloat(toppSlider.value) : (temp === 0 ? 1.0 : 0.9);
+            const topP = toppSlider ? parseFloat(toppSlider.value) : 0.9;
             const repPenalty = repSlider ? parseFloat(repSlider.value) : 1.1;
 
             const response = await fetch("/api/chat", {
