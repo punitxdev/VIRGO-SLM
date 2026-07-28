@@ -40,6 +40,12 @@ TOKENIZER_PATH = os.path.join(BASE_DIR, "virgo_data_tokens", "virgo_tokenizer.js
 # =============================================
 MODEL_REGISTRY = {
     "virgo_instruct": {
+        "name": "Virgo Instruct Tuning",
+        "file": "virgo_instruct_tuning.pt",
+        "description": "Final instruction-tuning alignment checkpoint",
+        "kaggle": "https://www.kaggle.com/models/punitkashyap2007/virgo-instruct",
+    },
+    "virgo_instruct_v2": {
         "name": "Virgo Instruct V2",
         "file": "virgo_instruction_v2.pt",
         "description": "Instruction-following model fine-tuned for prompt execution (V2)",
@@ -77,9 +83,12 @@ def _load_engine(model_id: str) -> VirgoInference:
 
     info = MODEL_REGISTRY[model_id]
     path = os.path.join(BASE_DIR, "trained_models", info["file"])
-
     if not os.path.exists(path):
-        raise FileNotFoundError(f"Checkpoint not found: {path}")
+        alt_path = os.path.join(BASE_DIR, "trained_models", "final_models", info["file"])
+        if os.path.exists(alt_path):
+            path = alt_path
+        else:
+            raise FileNotFoundError(f"Checkpoint not found: {path}")
 
     print(f"Loading model '{info['name']}' from {path} ...")
     engine = VirgoInference(model_path=path, tokenizer_path=TOKENIZER_PATH)
