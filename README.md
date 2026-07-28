@@ -20,6 +20,7 @@
 ---
 
 ## 📖 Table of Contents
+- [📄 Full Technical Report (docs/PROJECT_REPORT.md)](docs/PROJECT_REPORT.md)
 - [📢 An Honest Confession & Transparency Notice](#-an-honest-confession--transparency-notice)
 - [📦 Official Model Weights on Kaggle Models](#-official-model-weights-on-kaggle-models)
 - [✨ Key Features & Technical Highlights](#-key-features--technical-highlights)
